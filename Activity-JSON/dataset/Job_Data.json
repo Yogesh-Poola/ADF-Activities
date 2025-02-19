@@ -1,0 +1,76 @@
+{
+	"name": "Job_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "data_science_job.csv",
+				"container": "source"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "enrollee_id",
+				"type": "String"
+			},
+			{
+				"name": "city",
+				"type": "String"
+			},
+			{
+				"name": "city_development_index",
+				"type": "String"
+			},
+			{
+				"name": "gender",
+				"type": "String"
+			},
+			{
+				"name": "relevent_experience",
+				"type": "String"
+			},
+			{
+				"name": "enrolled_university",
+				"type": "String"
+			},
+			{
+				"name": "education_level",
+				"type": "String"
+			},
+			{
+				"name": "major_discipline",
+				"type": "String"
+			},
+			{
+				"name": "experience",
+				"type": "String"
+			},
+			{
+				"name": "company_size",
+				"type": "String"
+			},
+			{
+				"name": "company_type",
+				"type": "String"
+			},
+			{
+				"name": "training_hours",
+				"type": "String"
+			},
+			{
+				"name": "target",
+				"type": "String"
+			}
+		]
+	}
+}
