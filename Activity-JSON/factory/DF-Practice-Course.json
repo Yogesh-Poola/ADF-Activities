@@ -1,0 +1,9 @@
+{
+	"name": "DF-Practice-Course",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "abb2e736-790c-4d0f-a60d-81988e2fbfba",
+		"tenantId": "cb138d2b-17b7-46ea-93f0-9fc451572757"
+	}
+}
