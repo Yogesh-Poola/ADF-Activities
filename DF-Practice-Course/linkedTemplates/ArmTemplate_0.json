@@ -38,16 +38,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/OnPremIntegrationRuntime')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -61,6 +51,16 @@
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					}
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OnPremIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
 			},
 			"dependsOn": []
 		},
@@ -120,6 +120,28 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EndDateDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "test-delete"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		},
 		{
@@ -204,25 +226,352 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/EndDateDS')]",
+			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
+					"referenceName": "AzureBlobStorage1",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Binary",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "test-delete"
-					}
-				}
+						"type": "AzureBlobStorageLocation",
+						"container": "case1-op"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Case2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "case2-op"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Case3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "case3-op"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Case1Source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"fileName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().fileName",
+							"type": "Expression"
+						},
+						"container": "source"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Store",
+						"type": "String"
+					},
+					{
+						"name": "StoreType",
+						"type": "String"
+					},
+					{
+						"name": "Assortment",
+						"type": "String"
+					},
+					{
+						"name": "CompetitionDistance",
+						"type": "String"
+					},
+					{
+						"name": "CompetitionOpenSinceMonth",
+						"type": "String"
+					},
+					{
+						"name": "CompetitionOpenSinceYear",
+						"type": "String"
+					},
+					{
+						"name": "Promo2",
+						"type": "String"
+					},
+					{
+						"name": "Promo2SinceWeek",
+						"type": "String"
+					},
+					{
+						"name": "Promo2SinceYear",
+						"type": "String"
+					},
+					{
+						"name": "PromoInterval",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Case2Sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"OutputFolder": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": {
+							"value": "@dataset().OutputFolder",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/UntilSourceFile')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"inputFileDsParam": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().inputFileDsParam",
+							"type": "Expression"
+						},
+						"container": "source"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Store",
+						"type": "String"
+					},
+					{
+						"name": "StoreType",
+						"type": "String"
+					},
+					{
+						"name": "Assortment",
+						"type": "String"
+					},
+					{
+						"name": "CompetitionDistance",
+						"type": "String"
+					},
+					{
+						"name": "CompetitionOpenSinceMonth",
+						"type": "String"
+					},
+					{
+						"name": "CompetitionOpenSinceYear",
+						"type": "String"
+					},
+					{
+						"name": "Promo2",
+						"type": "String"
+					},
+					{
+						"name": "Promo2SinceWeek",
+						"type": "String"
+					},
+					{
+						"name": "Promo2SinceYear",
+						"type": "String"
+					},
+					{
+						"name": "PromoInterval",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/UntilOutputFolder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ouputFolderDsParam": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": {
+							"value": "@dataset().ouputFolderDsParam",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Delete-Activity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "DeleteEndDate",
+						"type": "Delete",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "EndDateDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"enableLogging": false,
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"modifiedDatetimeEnd": "2025-02-19T21:37:00.000Z",
+								"wildcardFileName": "*.xlsx",
+								"enablePartitionDiscovery": false
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/EndDateDS')]"
 			]
 		},
 		{
@@ -310,6 +659,7 @@
 							],
 							"storeSettings": {
 								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
 								"enablePartitionDiscovery": false
 							},
 							"formatSettings": {
@@ -357,47 +707,405 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Delete-Activity')]",
+			"name": "[concat(parameters('factoryName'), '/Switch-Activity')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "DeleteEndDate",
-						"type": "Delete",
+						"name": "Switch1",
+						"type": "Switch",
 						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
 						"userProperties": [],
 						"typeProperties": {
-							"dataset": {
-								"referenceName": "EndDateDS",
-								"type": "DatasetReference",
-								"parameters": {}
+							"on": {
+								"value": "@pipeline().parameters.routeSelection",
+								"type": "Expression"
 							},
-							"enableLogging": false,
-							"storeSettings": {
-								"type": "AzureBlobFSReadSettings",
-								"recursive": true,
-								"modifiedDatetimeEnd": "2025-02-19T21:37:00.000Z",
-								"wildcardFileName": "*.xlsx",
-								"enablePartitionDiscovery": false
-							}
+							"cases": [
+								{
+									"value": "1",
+									"activities": [
+										{
+											"name": "Copy data1",
+											"type": "Copy",
+											"dependsOn": [],
+											"policy": {
+												"timeout": "0.12:00:00",
+												"retry": 0,
+												"retryIntervalInSeconds": 30,
+												"secureOutput": false,
+												"secureInput": false
+											},
+											"userProperties": [],
+											"typeProperties": {
+												"source": {
+													"type": "DelimitedTextSource",
+													"storeSettings": {
+														"type": "AzureBlobStorageReadSettings",
+														"recursive": true,
+														"wildcardFileName": {
+															"value": "@pipeline().parameters.inputFile",
+															"type": "Expression"
+														},
+														"enablePartitionDiscovery": false
+													},
+													"formatSettings": {
+														"type": "DelimitedTextReadSettings"
+													}
+												},
+												"sink": {
+													"type": "DelimitedTextSink",
+													"storeSettings": {
+														"type": "AzureBlobStorageWriteSettings"
+													},
+													"formatSettings": {
+														"type": "DelimitedTextWriteSettings",
+														"quoteAllText": true,
+														"fileExtension": ".txt"
+													}
+												},
+												"enableStaging": false,
+												"translator": {
+													"type": "TabularTranslator",
+													"typeConversion": true,
+													"typeConversionSettings": {
+														"allowDataTruncation": true,
+														"treatBooleanAsNumber": false
+													}
+												}
+											},
+											"inputs": [
+												{
+													"referenceName": "Case1Source",
+													"type": "DatasetReference",
+													"parameters": {
+														"fileName": {
+															"value": "@pipeline().parameters.inputFile",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"outputs": [
+												{
+													"referenceName": "Case2Sink",
+													"type": "DatasetReference",
+													"parameters": {
+														"OutputFolder": {
+															"value": "@pipeline().parameters.OutputFolder1",
+															"type": "Expression"
+														}
+													}
+												}
+											]
+										}
+									]
+								},
+								{
+									"value": "2",
+									"activities": [
+										{
+											"name": "Copy 2",
+											"type": "Copy",
+											"dependsOn": [],
+											"policy": {
+												"timeout": "0.12:00:00",
+												"retry": 0,
+												"retryIntervalInSeconds": 30,
+												"secureOutput": false,
+												"secureInput": false
+											},
+											"userProperties": [],
+											"typeProperties": {
+												"source": {
+													"type": "DelimitedTextSource",
+													"storeSettings": {
+														"type": "AzureBlobStorageReadSettings",
+														"recursive": true,
+														"wildcardFileName": {
+															"value": "@pipeline().parameters.inputFile",
+															"type": "Expression"
+														},
+														"enablePartitionDiscovery": false
+													},
+													"formatSettings": {
+														"type": "DelimitedTextReadSettings"
+													}
+												},
+												"sink": {
+													"type": "DelimitedTextSink",
+													"storeSettings": {
+														"type": "AzureBlobStorageWriteSettings"
+													},
+													"formatSettings": {
+														"type": "DelimitedTextWriteSettings",
+														"quoteAllText": true,
+														"fileExtension": ".txt"
+													}
+												},
+												"enableStaging": false,
+												"translator": {
+													"type": "TabularTranslator",
+													"typeConversion": true,
+													"typeConversionSettings": {
+														"allowDataTruncation": true,
+														"treatBooleanAsNumber": false
+													}
+												}
+											},
+											"inputs": [
+												{
+													"referenceName": "Case1Source",
+													"type": "DatasetReference",
+													"parameters": {
+														"fileName": {
+															"value": "@pipeline().parameters.inputFile",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"outputs": [
+												{
+													"referenceName": "Case2Sink",
+													"type": "DatasetReference",
+													"parameters": {
+														"OutputFolder": {
+															"value": "@pipeline().parameters.OutputFolder2",
+															"type": "Expression"
+														}
+													}
+												}
+											]
+										}
+									]
+								},
+								{
+									"value": "3",
+									"activities": [
+										{
+											"name": "Copy 3",
+											"type": "Copy",
+											"dependsOn": [],
+											"policy": {
+												"timeout": "0.12:00:00",
+												"retry": 0,
+												"retryIntervalInSeconds": 30,
+												"secureOutput": false,
+												"secureInput": false
+											},
+											"userProperties": [],
+											"typeProperties": {
+												"source": {
+													"type": "DelimitedTextSource",
+													"storeSettings": {
+														"type": "AzureBlobStorageReadSettings",
+														"recursive": true,
+														"wildcardFileName": {
+															"value": "@pipeline().parameters.inputFile",
+															"type": "Expression"
+														},
+														"enablePartitionDiscovery": false
+													},
+													"formatSettings": {
+														"type": "DelimitedTextReadSettings"
+													}
+												},
+												"sink": {
+													"type": "DelimitedTextSink",
+													"storeSettings": {
+														"type": "AzureBlobStorageWriteSettings"
+													},
+													"formatSettings": {
+														"type": "DelimitedTextWriteSettings",
+														"quoteAllText": true,
+														"fileExtension": ".txt"
+													}
+												},
+												"enableStaging": false,
+												"translator": {
+													"type": "TabularTranslator",
+													"typeConversion": true,
+													"typeConversionSettings": {
+														"allowDataTruncation": true,
+														"treatBooleanAsNumber": false
+													}
+												}
+											},
+											"inputs": [
+												{
+													"referenceName": "Case1Source",
+													"type": "DatasetReference",
+													"parameters": {
+														"fileName": {
+															"value": "@pipeline().parameters.inputFile",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"outputs": [
+												{
+													"referenceName": "Case2Sink",
+													"type": "DatasetReference",
+													"parameters": {
+														"OutputFolder": {
+															"value": "@pipeline().parameters.OutputFolder3",
+															"type": "Expression"
+														}
+													}
+												}
+											]
+										}
+									]
+								}
+							]
 						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"parameters": {
+					"routeSelection": {
+						"type": "string"
+					},
+					"inputFile": {
+						"type": "string"
+					},
+					"OutputFolder1": {
+						"type": "string"
+					},
+					"OutputFolder2": {
+						"type": "string"
+					},
+					"OutputFolder3": {
+						"type": "string"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/EndDateDS')]"
+				"[concat(variables('factoryId'), '/datasets/Case1Source')]",
+				"[concat(variables('factoryId'), '/datasets/Case2Sink')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Until-Activity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Until1",
+						"type": "Until",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(pipeline().parameters.repeatLoop,'false')",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": {
+													"value": "@pipeline().parameters.inputFile",
+													"type": "Expression"
+												},
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "UntilSourceFile",
+											"type": "DatasetReference",
+											"parameters": {
+												"inputFileDsParam": {
+													"value": "@pipeline().parameters.inputFile",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "UntilOutputFolder",
+											"type": "DatasetReference",
+											"parameters": {
+												"ouputFolderDsParam": {
+													"value": "@pipeline().parameters.outputFolder",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							],
+							"timeout": "0.00:01:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"inputFile": {
+						"type": "string"
+					},
+					"outputFolder": {
+						"type": "string"
+					},
+					"repeatLoop": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/UntilSourceFile')]",
+				"[concat(variables('factoryId'), '/datasets/UntilOutputFolder')]"
 			]
 		}
 	]
