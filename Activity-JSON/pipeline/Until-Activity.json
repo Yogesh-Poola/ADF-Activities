@@ -1,0 +1,108 @@
+{
+	"name": "Until-Activity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(pipeline().parameters.repeatLoop,'false')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"wildcardFileName": {
+											"value": "@pipeline().parameters.inputFile",
+											"type": "Expression"
+										},
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "UntilSourceFile",
+									"type": "DatasetReference",
+									"parameters": {
+										"inputFileDsParam": {
+											"value": "@pipeline().parameters.inputFile",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "UntilOutputFolder",
+									"type": "DatasetReference",
+									"parameters": {
+										"ouputFolderDsParam": {
+											"value": "@pipeline().parameters.outputFolder",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					],
+					"timeout": "0.00:01:00"
+				}
+			}
+		],
+		"parameters": {
+			"inputFile": {
+				"type": "string"
+			},
+			"outputFolder": {
+				"type": "string"
+			},
+			"repeatLoop": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
