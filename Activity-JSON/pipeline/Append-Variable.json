@@ -16,14 +16,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "Source",
+						"referenceName": "Job_Data",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"childItems"
+						"structure"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {

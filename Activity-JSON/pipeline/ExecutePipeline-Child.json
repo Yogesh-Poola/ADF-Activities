@@ -18,7 +18,7 @@
 					"source": {
 						"type": "DelimitedTextSource",
 						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
+							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"enablePartitionDiscovery": false
 						},
@@ -29,7 +29,7 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
+							"type": "AzureBlobFSWriteSettings"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
@@ -49,7 +49,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Source_General",
+						"referenceName": "Source_ADLS",
 						"type": "DatasetReference",
 						"parameters": {
 							"fileName_Child": {
@@ -61,10 +61,10 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Sink_General",
+						"referenceName": "sink_adls",
 						"type": "DatasetReference",
 						"parameters": {
-							"Sink_Child": {
+							"sink_Child": {
 								"value": "@pipeline().parameters.sink_Main",
 								"type": "Expression"
 							}

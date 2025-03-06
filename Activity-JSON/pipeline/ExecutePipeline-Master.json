@@ -15,7 +15,17 @@
 						"referenceName": "ExecutePipeline-Child",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"fileName_Main": {
+							"value": "@pipeline().parameters.fileName_Master",
+							"type": "Expression"
+						},
+						"sink_Main": {
+							"value": "@pipeline().parameters.sink_Master",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
