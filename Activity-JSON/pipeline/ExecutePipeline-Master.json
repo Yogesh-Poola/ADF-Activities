@@ -1,0 +1,32 @@
+{
+	"name": "ExecutePipeline-Master",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ExecutePipeline-Child",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"parameters": {
+			"fileName_Master": {
+				"type": "string"
+			},
+			"sink_Master": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
