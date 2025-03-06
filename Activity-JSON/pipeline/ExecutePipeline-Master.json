@@ -1,0 +1,42 @@
+{
+	"name": "ExecutePipeline-Master",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ExecutePipeline-Child",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"fileName_Main": {
+							"value": "@pipeline().parameters.fileName_Master",
+							"type": "Expression"
+						},
+						"sink_Main": {
+							"value": "@pipeline().parameters.sink_Master",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"fileName_Master": {
+				"type": "string"
+			},
+			"sink_Master": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
