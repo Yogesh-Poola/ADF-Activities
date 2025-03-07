@@ -11,8 +11,20 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://adlsgen2testsa.dfs.core.windows.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "sqlserverretaildata.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "test"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "ypula_admin"
 		},
 		"containerUri": {
 			"value": ""
