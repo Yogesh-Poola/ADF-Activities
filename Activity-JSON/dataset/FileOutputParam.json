@@ -21,7 +21,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(dataset().InitialOPName,string(dataset().NumberOP),'.csv')",
+					"value": "@concat(dataset().InitialOPName,'-',string(dataset().NumberOP),'.csv')",
 					"type": "Expression"
 				},
 				"folderPath": "FileOutputParam",

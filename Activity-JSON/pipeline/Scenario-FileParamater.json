@@ -50,29 +50,53 @@
 				"inputs": [
 					{
 						"referenceName": "FileParameterDS",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"InititalName": {
+								"value": "@pipeline().parameters.InputFileInitial",
+								"type": "Expression"
+							},
+							"NumberOfPeople": {
+								"value": "@pipeline().parameters.InputFileNumber",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "FileOutputParam",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"InitialOPName": {
+								"value": "@pipeline().parameters.OutputFileInitial",
+								"type": "Expression"
+							},
+							"NumberOP": {
+								"value": "@pipeline().parameters.OutputFileNumber",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
 		"parameters": {
 			"InputFileInitial": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AAAA"
 			},
 			"InputFileNumber": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 0
 			},
 			"OutputFileInitial": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AAAA"
 			},
 			"OutputFileNumber": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 0
 			}
 		},
 		"annotations": []
