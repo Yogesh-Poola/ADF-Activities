@@ -12,7 +12,7 @@
 			},
 			"NumberOP": {
 				"type": "int",
-				"defaultValue": "Default"
+				"defaultValue": 0
 			}
 		},
 		"annotations": [],
