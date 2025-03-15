@@ -1,0 +1,37 @@
+{
+	"name": "FileOutputParam",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"InitialOPName": {
+				"type": "string",
+				"defaultValue": "Default"
+			},
+			"NumberOP": {
+				"type": "int",
+				"defaultValue": "Default"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().InitialOPName,string(dataset().NumberOP),'.csv')",
+					"type": "Expression"
+				},
+				"folderPath": "FileOutputParam",
+				"fileSystem": "sink"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
