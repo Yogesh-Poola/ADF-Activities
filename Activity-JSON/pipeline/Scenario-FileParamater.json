@@ -1,0 +1,104 @@
+{
+	"name": "Scenario-FileParamater",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "FileParameterDS",
+						"type": "DatasetReference",
+						"parameters": {
+							"InititalName": {
+								"value": "@pipeline().parameters.InputFileInitial",
+								"type": "Expression"
+							},
+							"NumberOfPeople": {
+								"value": "@pipeline().parameters.InputFileNumber",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "FileOutputParam",
+						"type": "DatasetReference",
+						"parameters": {
+							"InitialOPName": {
+								"value": "@pipeline().parameters.OutputFileInitial",
+								"type": "Expression"
+							},
+							"NumberOP": {
+								"value": "@pipeline().parameters.OutputFileNumber",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"InputFileInitial": {
+				"type": "string",
+				"defaultValue": "AAAA"
+			},
+			"InputFileNumber": {
+				"type": "int",
+				"defaultValue": 0
+			},
+			"OutputFileInitial": {
+				"type": "string",
+				"defaultValue": "AAAA"
+			},
+			"OutputFileNumber": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"annotations": []
+	}
+}
